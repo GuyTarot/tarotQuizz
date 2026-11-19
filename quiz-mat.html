@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz Tarot - Le Mat</title>
+
+<style>
+
+body{
+    font-family: Arial, sans-serif;
+    background:#f4f4f4;
+    margin:0;
+    padding:20px;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+    background:white;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+h1{
+    text-align:center;
+    color:#2c3e50;
+}
+
+.question{
+    margin-bottom:30px;
+    padding-bottom:15px;
+    border-bottom:1px solid #ddd;
+}
+
+.question h3{
+    color:#34495e;
+}
+
+.resultat{
+    margin-top:30px;
+    padding:20px;
+    border-radius:10px;
+    display:none;
+}
+
+.success{
+    background:#d4edda;
+    color:#155724;
+}
+
+button{
+    background:#2c3e50;
+    color:white;
+    border:none;
+    padding:15px 25px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:18px;
+}
+
+button:hover{
+    background:#1a252f;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Quiz Tarot de Marseille : Le Mat</h1>
+
+<p>
+Nom :
+<input type="text" id="nom" placeholder="Votre prénom">
+</p>
+
+<form id="quizForm">
+
+<div class="question">
+<h3>1. Quelle est la mission principale du Mat ?</h3>
+
+<label><input type="radio" name="q1" value="a"> Construire une situation stable</label><br>
+<label><input type="radio" name="q1" value="b"> Suivre son appel intérieur même lorsque le chemin n'est pas visible</label><br>
+<label><input type="radio" name="q1" value="c"> Trouver un équilibre entre deux forces</label><br>
+<label><input type="radio" name="q1" value="d"> Transmettre son expérience</label>
+
+</div>
+
+<div class="question">
+<h3>2. Quelle énergie lumière correspond le mieux au Mat ?</h3>
+
+<label><input type="radio" name="q2" value="a"> Liberté, audace, confiance</label><br>
+<label><input type="radio" name="q2" value="b"> Contrôle, stabilité, ordre</label><br>
+<label><input type="radio" name="q2" value="c"> Prudence et méthode</label><br>
+<label><input type="radio" name="q2" value="d"> Solitude et réflexion</label>
+
+</div>
+
+<div class="question">
+<h3>3. Quelle est l'erreur fréquente du Mat ?</h3>
+
+<label><input type="radio" name="q3" value="a"> Confondre vérité et justice</label><br>
+<label><input type="radio" name="q3" value="b"> Confondre liberté et absence d'engagement</label><br>
+<label><input type="radio" name="q3" value="c"> Confondre intuition et émotion</label><br>
+<label><input type="radio" name="q3" value="d"> Confondre patience et lenteur</label>
+
+</div>
+
+<div class="question">
+<h3>4. Quelle phrase résume le mieux le Mat lumineux ?</h3>
+
+<label><input type="radio" name="q4" value="a"> Je contrôle mon avenir</label><br>
+<label><input type="radio" name="q4" value="b"> Je protège mes acquis</label><br>
+<label><input type="radio" name="q4" value="c"> Je fais confiance à la vie</label><br>
+<label><input type="radio" name="q4" value="d"> Je cherche encore ma place</label>
+
+</div>
+
+<div class="question">
+<h3>5. Dans votre méthode, quelle est la différence fondamentale entre le Mat droit et le Mat renversé ?</h3>
+
+<label><input type="radio" name="q5" value="a"> Aucune différence</label><br>
+<label><input type="radio" name="q5" value="b"> Le Mat droit représente un voyage et le Mat renversé une réussite</label><br>
+<label><input type="radio" name="q5" value="c"> Le Mat droit part vers l'inconnu, le Mat renversé est lui-même l'inconnu</label><br>
+<label><input type="radio" name="q5" value="d"> Le Mat renversé est toujours négatif</label>
+
+</div>
+
+<button type="button" onclick="corrigerQuiz()">
+Valider
+</button>
+
+</form>
+
+<div id="resultat" class="resultat"></div>
+
+</div>
+
+<script>
+
+function corrigerQuiz(){
+
+let score = 0;
+
+const reponses = {
+q1:"b",
+q2:"a",
+q3:"b",
+q4:"c",
+q5:"c"
+};
+
+for(let question in reponses){
+
+let selection =
+document.querySelector('input[name="'+question+'"]:checked');
+
+if(selection && selection.value === reponses[question]){
+score++;
+}
+
+}
+
+let pourcentage = (score / 5) * 100;
+
+let appreciation = "";
+
+if(score === 5){
+appreciation = "⭐⭐⭐⭐⭐ Maîtrise parfaite du Mat";
+}
+else if(score === 4){
+appreciation = "⭐⭐⭐⭐ Très bonne compréhension";
+}
+else if(score === 3){
+appreciation = "⭐⭐⭐ Bases acquises";
+}
+else if(score === 2){
+appreciation = "⭐⭐ À renforcer";
+}
+else{
+appreciation = "⭐ Révision nécessaire";
+}
+
+document.getElementById("resultat").style.display="block";
+document.getElementById("resultat").className="resultat success";
+
+document.getElementById("resultat").innerHTML = `
+<h2>Résultat</h2>
+<p><strong>Score :</strong> ${score}/5</p>
+<p><strong>Réussite :</strong> ${pourcentage}%</p>
+<p><strong>Évaluation :</strong> ${appreciation}</p>
+`;
+
+}
+
+</script>
+
+</body>
+</html>
