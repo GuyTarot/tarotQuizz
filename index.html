@@ -1,11 +1,499 @@
-<h1>Académie du Tarot de Marseille</h1>
+<!DOCTYPE html>
+<html lang="fr">
 
-<a href="quiz-mat.html">
-Quiz du Mat
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Tarot Quiz - Académie du Tarot de Marseille</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f5f5f5;
+}
+
+header{
+    background:#1f2937;
+    color:white;
+    padding:40px;
+    text-align:center;
+}
+
+header h1{
+    margin:0;
+    font-size:40px;
+}
+
+header p{
+    margin-top:10px;
+    font-size:18px;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:30px;
+}
+
+.cycle{
+    background:white;
+    margin-bottom:30px;
+    border-radius:12px;
+    padding:25px;
+    box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+.cycle h2{
+    color:#2c3e50;
+    border-bottom:2px solid #ddd;
+    padding-bottom:10px;
+}
+
+.grille{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+    gap:15px;
+    margin-top:20px;
+}
+
+.arcane{
+
+background:white;
+border-radius:12px;
+padding:15px;
+text-align:center;
+
+box-shadow:0 0 10px rgba(0,0,0,0.15);
+
+}
+
+.arcane img{
+
+height:350px;
+
+object-fit:cover;
+
+border-radius:10px;
+
+}
+
+.arcane h3{
+
+margin-top:15px;
+
+}
+
+.mission{
+
+color:#666;
+font-style:italic;
+
+}
+
+.bouton{
+
+display:inline-block;
+
+background:#2c3e50;
+color:white;
+
+padding:10px 15px;
+
+border-radius:8px;
+
+text-decoration:none;
+
+margin-top:10px;
+
+}
+
+.bouton:hover{
+
+background:#1b2836;
+
+}
+.fiche{
+
+display:block;
+
+background:#d4af37;
+
+color:white;
+
+padding:10px;
+
+margin-bottom:12px;
+
+border-radius:8px;
+
+text-decoration:none;
+
+font-weight:bold;
+
+}
+
+.fiche:hover{
+
+background:#b89728;
+
+}
+
+footer{
+    text-align:center;
+    padding:30px;
+    color:#666;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>🔮 TaroloGuy</h1>
+
+<p>
+
+Académie du Tarot de Marseille
+
+</p><p>
+
+Par Guy DA CUNHA
+
+</p>
+
+
+</header>
+
+<div class="container">
+
+<div class="cycle">
+
+<h2>Acte I - Construire son identité</h2>
+<div class="grille">
+
+<div class="arcane">
+<img src="images/bateleur.jpg"
+alt="Le Bateleur">
+<div class="arcane-content">
+<a class="fiche"
+href="fiches/01_Le_Bateleur.pdf"
+target="_blank">
+📖 Lire la fiche
 </a>
-
-<br><br>
-
-<a href="quiz-bateleur.html">
-Quiz du Bateleur
+<h3>I - Le Bateleur</h3>
+<p class="mission">
+J'ose
+</p>
+<a class="bouton"
+href="quiz-bateleur.html">
+📝 Faire le quiz
 </a>
+</div>
+</div>
+
+
+
+<div class="arcane">
+<img src="images/papesse.jpg" alt="La Papesse">
+<div class="arcane-content">
+<a class="fiche" href="fiches/02_La_Papesse.pdf" target="_blank">
+📖 Lire la fiche </a>
+<h3>II - La Papesse</h3>
+<p class="mission"> Je comprends </p>
+<a class="bouton" href="quiz-papesse.html"> 📝 Faire le quiz </a>
+</div>
+</div>
+
+
+<div class="arcane">
+<img src="images/imperatrice.jpg" alt="L'Impératrice">
+<div class="arcane-content">
+<a class="fiche" href="fiches/03_imperatrice.pdf" target="_blank">
+📖 Lire la fiche </a>
+<h3>III - L'Impératrice</h3>
+<p class="mission"> J'exprime </p>
+<a class="bouton" href="quiz-imperatrice.html"> 📝 Faire le quiz </a>
+</div>
+</div>
+
+
+<div class="arcane">
+<img src="images/empereur.jpg" alt="L'Empereur">
+<div class="arcane-content">
+<a class="fiche" href="fiches/04_empereur.pdf" target="_blank">
+📖 Lire la fiche </a>
+<h3>IIII - L'Empereur</h3>
+<p class="mission">Je construis</p>
+<a class="bouton" href="quiz-empereur.html"> 📝 Faire le quiz </a>
+</div>
+</div>
+
+
+<div class="arcane">
+<img src="images/pape.jpg" alt="Le Pape">
+<div class="arcane-content">
+<a class="fiche" href="fiches/05_Le_pape.pdf" target="_blank">
+📖 Lire la fiche </a>
+<h3>V - Le Pape</h3>
+<p class="mission">Je transmets</p>
+<a class="bouton" href="quiz-pape.html"> 📝 Faire le quiz </a>
+</div>
+</div>
+
+
+</div>
+
+<h2>Acte II - Choisir sa voie</h2>
+
+<div class="grille">
+
+<div class="arcane">
+<img src="images/amoureux.jpg" alt="L'Amoureux">
+<div class="arcane-content">
+<a class="fiche" href="fiches/06_amoureux.pdf" target="_blank">
+📖 Lire la fiche </a>
+<h3>VI - L'Amoureux</h3>
+<p class="mission">Je choisis</p>
+<a class="bouton" href="quiz-amoureux.html">Faire le quiz</a>
+</div>
+</div>
+
+<div class="arcane">
+<img src="images/chariot.jpg" alt="Le Chariot">
+<div class="arcane-content">
+<a class="fiche" href="fiches/07_Le_chariot.pdf" target="_blank">
+📖 Lire la fiche </a>
+<h3>VII - Le Chariot</h3>
+<p class="mission">J'avance</p>
+<a class="bouton" href="quiz-chariot.html">Faire le quiz</a>
+</div>
+</div>
+
+
+<div class="arcane">
+<img src="images/justice.jpg" alt="La Justice">
+<div class="arcane-content">
+<a class="fiche" href="fiches/08_La_justice.pdf" target="_blank">
+📖 Lire la fiche </a>
+<h3>VIII - La Justice</h3>
+<p class="mission">J'équilibre</p>
+<a class="bouton" href="quiz-justice.html">Faire le quiz</a>
+</div>
+</div>
+
+
+<div class="arcane">
+<img src="images/ermite.jpg" alt="L'Ermite">
+<div class="arcane-content">
+<a class="fiche" href="fiches/09_Hermite.pdf" target="_blank">
+📖 Lire la fiche </a>
+
+<h3>VIIII - L'Ermite</h3>
+<p class="mission">Je cherche</p>
+<a class="bouton" href="quiz-ermite.html">Faire le quiz</a>
+</div>
+</div>
+
+</div>
+
+<h2>Acte III - Accepter le changement</h2>
+
+<div class="grille">
+
+<div class="arcane">
+<img src="images/roue.jpg" alt="Roue de Fortune">
+<div class="arcane-content">
+<a class="fiche" href="fiches/10_La_roue.pdf" target="_blank">
+📖 Lire la fiche </a>
+
+<h3>X - Roue de Fortune</h3>
+<p class="mission">J'évolue</p>
+<a class="bouton" href="quiz-roue.html">Faire le quiz</a>
+</div>
+</div>
+
+
+<div class="arcane">
+<img src="images/force.jpg" alt="La Force">
+<div class="arcane-content">
+<a class="fiche" href="fiches/11_La_force.pdf" target="_blank">
+📖 Lire la fiche </a>
+<h3>XI - La Force</h3>
+<p class="mission">Je maîtrise</p>
+<a class="bouton" href="quiz-force.html">Faire le quiz</a>
+</div>
+</div>
+
+
+
+<div class="arcane">
+<img src="images/pendu.jpg" alt="Le Pendu">
+<div class="arcane-content">
+<a class="fiche" href="fiches/12_Le_pendu.pdf" target="_blank">
+📖 Lire la fiche </a>
+
+<h3>XII - Le Pendu</h3>
+<p class="mission">Je lâche prise</p>
+<a class="bouton" href="quiz-pendu.html">Faire le quiz</a>
+</div>
+</div>
+
+<div class="arcane">
+<img src="images/arcane13.jpg" alt="Arcane Sans Nom">
+<div class="arcane-content">
+<a class="fiche" href="fiches/13_Arcane13.pdf" target="_blank">
+📖 Lire la fiche </a>
+
+<h3>XIII - Arcane Sans Nom</h3>
+<p class="mission">Je transforme</p>
+<a class="bouton" href="quiz-arcane13.html">Faire le quiz</a>
+</div>
+</div>
+
+</div>
+
+
+<div class="cycle">
+<h2>Acte IV - Rencontrer son ombre</h2>
+
+<div class="grille">
+
+<div class="arcane">
+<img src="images/temperance.jpg" alt="Tempérance">
+<div class="arcane-content">
+<a class="fiche" href="fiches/14_Temperance.pdf" target="_blank">
+📖 Lire la fiche </a>
+<h3>XIIII - Tempérance</h3>
+<p class="mission">J'harmonise</p>
+<a class="bouton" href="quiz-temperance.html">Faire le quiz</a>
+</div>
+</div>
+
+
+<div class="arcane">
+<img src="images/diable.jpg" alt="Le Diable">
+<div class="arcane-content">
+<a class="fiche" href="fiches/15_Le_diable.pdf" target="_blank">
+📖 Lire la fiche </a>
+<h3>XV - Le Diable</h3>
+<p class="mission">Je me confronte</p>
+<a class="bouton" href="quiz-diable.html">Faire le quiz</a>
+</div>
+</div>
+
+
+<div class="arcane">
+<img src="images/maison-dieu.jpg" alt="La Maison Dieu">
+<div class="arcane-content">
+<a class="fiche" href="fiches/16_Maison_Dieu.pdf" target="_blank">
+📖 Lire la fiche </a>
+<h3>XVI - La Maison Dieu</h3>
+<p class="mission">Je me libère</p>
+<a class="bouton" href="quiz-maisondieu.html">Faire le quiz</a>
+</div>
+</div>
+
+</div>
+
+<div class="cycle">
+
+<h2>Acte V - Devenir soi-même</h2>
+
+<div class="grille">
+
+<div class="arcane">
+<img src="images/etoile.jpg" alt="L'Étoile">
+<div class="arcane-content">
+<a class="fiche" href="fiches/17_Etoile.pdf" target="_blank">
+📖 Lire la fiche </a>
+<h3>XVII - L'Étoile</h3>
+<p class="mission">Je rayonne</p>
+<a class="bouton" href="quiz-etoile.html">Faire le quiz</a>
+</div>
+</div>
+
+
+<div class="arcane">
+<img src="images/lune.jpg" alt="La Lune">
+<div class="arcane-content">
+<a class="fiche" href="fiches/18_La_lune.pdf" target="_blank">
+📖 Lire la fiche </a>
+<h3>XVIII - La Lune</h3>
+<p class="mission">Je ressens</p>
+<a class="bouton" href="quiz-lune.html">Faire le quiz</a>
+</div>
+</div>
+
+
+
+<div class="arcane">
+<img src="images/soleil.jpg" alt="Le Soleil">
+<div class="arcane-content">
+<a class="fiche" href="fiches/19_Le_soleil.pdf" target="_blank">
+📖 Lire la fiche </a>
+<h3>XVIIII - Le Soleil</h3>
+<p class="mission">Je partage</p>
+<a class="bouton" href="quiz-soleil.html">Faire le quiz</a>
+</div>
+</div>
+
+
+<div class="arcane">
+<img src="images/jugement.jpg" alt="Le Jugement">
+<div class="arcane-content">
+<a class="fiche" href="fiches/20_Le_jugement.pdf" target="_blank">
+📖 Lire la fiche </a>
+<h3>XX - Le Jugement</h3>
+<p class="mission">Je m'éveille</p>
+<a class="bouton" href="quiz-jugement.html">Faire le quiz</a>
+</div>
+</div>
+
+<div class="arcane">
+<img src="images/monde.jpg" alt="Le Monde">
+<div class="arcane-content">
+<a class="fiche" href="fiches/21_Le_monde.pdf" target="_blank">
+📖 Lire la fiche </a>
+<h3>XXI - Le Monde</h3>
+<p class="mission">J'accomplis</p>
+<a class="bouton" href="quiz-monde.html">Faire le quiz</a>
+</div>
+</div>
+
+<div class="arcane">
+<img src="images/mat.jpg" alt="Le Mat">
+<div class="arcane-content">
+<a class="fiche" href="fiches/00_Le_mat.pdf" target="_blank">
+📖 Lire la fiche </a>
+<h3>Le Mat</h3>
+<p class="mission">Je m'élance</p>
+<a class="bouton" href="quiz-mat.html">Faire le quiz</a>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<footer>
+
+www.guydacunha.com © 2026 - Guy DA CUNHA
+
+<br>
+
+Formation au Tarot de Marseille
+
+</footer>
+
+</body>
+
+</html>
