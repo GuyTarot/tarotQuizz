@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>TarotQuizz</title>
+
+<style>
+
+body{
+    font-family: Arial, sans-serif;
+    background:#f5f5f5;
+    margin:0;
+    padding:20px;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+    background:white;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 0 10px rgba(0,0,0,0.15);
+}
+
+h1{
+    text-align:center;
+    color:#2c3e50;
+}
+
+.question{
+    margin-bottom:30px;
+    padding-bottom:20px;
+    border-bottom:1px solid #ddd;
+}
+
+.question h3{
+    color:#34495e;
+}
+
+button{
+    background:#2c3e50;
+    color:white;
+    border:none;
+    padding:15px 25px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:18px;
+}
+
+button:hover{
+    background:#1a252f;
+}
+
+#resultat{
+    display:none;
+    margin-top:30px;
+    padding:20px;
+    background:#ecf9f0;
+    border:1px solid #28a745;
+    border-radius:10px;
+}
+
+.bonne{
+    color:green;
+    margin-top:10px;
+}
+
+.mauvaise{
+    color:red;
+    margin-top:10px;
+}
+
+.explication{
+    margin-top:5px;
+    font-style:italic;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1 id="titreQuiz"></h1>
+
+<p>
+
+Nom :
+
+<input type="text"
+id="nom"
+placeholder="Votre prénom">
+
+</p>
+
+<form id="quizContainer"></form>
+
+<button onclick="corrigerQuiz()">
+
+Valider le quiz
+
+</button>
+
+<div id="resultat"></div>
+
+</div>
+
+<script>
+
+/************************************************
+MODIFIER UNIQUEMENT CI-DESSOUS
+************************************************/
+
+const quizTitre =
+"Quiz : L'Impératrice";
+
+const quizData = [
+
+{
+question :
+"Quelle est la mission principale de l'Impératrice ?",
+
+reponses : [
+"Construire et sécuriser",
+"Donner une forme visible à ce qui existe déjà en soi",
+"Rechercher la vérité intérieure",
+"Accepter le changement"
+],
+
+bonne : 1,
+
+explication :
+"L'Impératrice est la carte qui transforme une idée en expression. Elle donne une forme visible à ce qui était encore intérieur."
+},
+
+{
+question :
+"Parmi ces propositions, laquelle correspond le mieux à l'énergie lumière de l'Impératrice ?",
+
+reponses : [
+"Créativité, expression, communication",
+"Patience, secret, observation",
+"Prudence, solitude, réflexion",
+"Rigueur, discipline, contrôle"
+],
+
+bonne : 0,
+
+explication :
+"L'Impératrice représente l'intelligence créatrice, la parole, l'expression et la capacité à faire émerger de nouvelles idées."
+},
+
+{
+question :
+"Dans un tirage, l'Impératrice apparaît en position CONTRE. Quelle interprétation est la plus cohérente ?",
+
+reponses : [
+"Le consultant manque de courage",
+"Le consultant doit accepter une fin de cycle",
+"Le consultant risque de rester dans les idées sans passer à l'action",
+"Une victoire rapide est assurée"
+],
+
+bonne : 2,
+
+explication :
+"L'ombre de l'Impératrice consiste souvent à produire des idées sans jamais leur donner une existence concrète."
+},
+
+{
+question :
+"Quelle est l'erreur fréquente de l'Impératrice ?",
+
+reponses : [
+"Confondre intuition et imagination",
+"Confondre intelligence et réalisation",
+"Confondre autorité et pouvoir",
+"Confondre émotion et vérité"
+],
+
+bonne : 1,
+
+explication :
+"L'Impératrice comprend vite, imagine facilement et communique avec talent. Son défi est de concrétiser ses idées."
+},
+
+{
+question :
+"Laquelle de ces phrases résume le mieux l'Impératrice lumineuse ?",
+
+reponses : [
+"Je crée et j'exprime",
+"Je maîtrise mes émotions",
+"Je prends le pouvoir",
+"Je cherche la vérité"
+],
+
+bonne : 0,
+
+explication :
+"L'Impératrice lumineuse ose exprimer sa créativité et rendre visibles ses idées."
+},
+
+{
+question :
+"Complète la progression initiatique : Papesse : Je comprends – Impératrice : ?",
+
+reponses : [
+"Je construis",
+"Je transmets",
+"J'exprime",
+"Je choisis"
+],
+
+bonne : 2,
+
+explication :
+"Dans ton cycle initiatique, l'Impératrice correspond à la mission : J'exprime."
+},
+
+{
+question :
+"Une consultante possède de nombreuses idées pour lancer son activité mais rien n'est encore concrétisé. L'Impératrice apparaît en conseil. Que suggère-t-elle ?",
+
+reponses : [
+"Attendre encore",
+"Chercher davantage d'idées",
+"Donner une forme concrète à ce qui existe déjà",
+"Abandonner le projet"
+],
+
+bonne : 2,
+
+explication :
+"L'Impératrice invite à passer de l'inspiration à l'expression concrète."
+}
+
+];
+/************************************************
+NE RIEN MODIFIER EN DESSOUS
+************************************************/
+
+document.getElementById("titreQuiz").innerText =
+quizTitre;
+
+const container =
+document.getElementById("quizContainer");
+
+quizData.forEach((q, index)=>{
+
+let html =
+`
+<div class="question">
+
+<h3>
+
+Question ${index+1}
+
+</h3>
+
+<p>${q.question}</p>
+`;
+
+q.reponses.forEach((r, i)=>{
+
+html +=
+`
+<label>
+
+<input
+type="radio"
+name="q${index}"
+value="${i}">
+
+${r}
+
+</label>
+
+<br>
+
+`;
+
+});
+
+html +=
+`
+<div id="feedback${index}"></div>
+
+</div>
+`;
+
+container.innerHTML += html;
+
+});
+
+function corrigerQuiz(){
+
+let score = 0;
+
+quizData.forEach((q,index)=>{
+
+let reponse =
+document.querySelector(
+'input[name="q'+index+'"]:checked'
+);
+
+let feedback =
+document.getElementById(
+"feedback"+index
+);
+
+if(
+reponse &&
+parseInt(reponse.value)
+=== q.bonne
+){
+
+score++;
+
+feedback.innerHTML =
+`
+<div class="bonne">
+
+✅ Bonne réponse
+
+</div>
+
+<div class="explication">
+
+${q.explication}
+
+</div>
+`;
+
+}
+else{
+
+feedback.innerHTML =
+`
+<div class="mauvaise">
+
+❌ Mauvaise réponse
+
+</div>
+
+<div class="explication">
+
+Bonne réponse :
+${q.reponses[q.bonne]}
+
+<br><br>
+
+${q.explication}
+
+</div>
+`;
+
+}
+
+});
+
+let appreciation = "";
+
+if(score === quizData.length){
+
+appreciation =
+"⭐⭐⭐⭐⭐ Maîtrise parfaite";
+
+}
+else if(score >= 4){
+
+appreciation =
+"⭐⭐⭐⭐ Très bonne compréhension";
+
+}
+else if(score >= 3){
+
+appreciation =
+"⭐⭐⭐ Bases acquises";
+
+}
+else if(score >= 2){
+
+appreciation =
+"⭐⭐ À renforcer";
+
+}
+else{
+
+appreciation =
+"⭐ Révision nécessaire";
+
+}
+
+document.getElementById(
+"resultat"
+).style.display="block";
+
+document.getElementById(
+"resultat"
+).innerHTML =
+
+`
+<h2>
+
+Résultat
+
+</h2>
+
+<p>
+
+Score :
+<strong>
+
+${score}/${quizData.length}
+
+</strong>
+
+</p>
+
+<p>
+
+${appreciation}
+
+</p>
+`;
+
+window.scrollTo(
+0,
+document.body.scrollHeight
+);
+
+}
+
+</script>
+
+</body>
+
+</html>

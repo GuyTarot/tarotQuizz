@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>TarotQuizz</title>
+
+<style>
+
+body{
+    font-family: Arial, sans-serif;
+    background:#f5f5f5;
+    margin:0;
+    padding:20px;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+    background:white;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 0 10px rgba(0,0,0,0.15);
+}
+
+h1{
+    text-align:center;
+    color:#2c3e50;
+}
+
+.question{
+    margin-bottom:30px;
+    padding-bottom:20px;
+    border-bottom:1px solid #ddd;
+}
+
+.question h3{
+    color:#34495e;
+}
+
+button{
+    background:#2c3e50;
+    color:white;
+    border:none;
+    padding:15px 25px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:18px;
+}
+
+button:hover{
+    background:#1a252f;
+}
+
+#resultat{
+    display:none;
+    margin-top:30px;
+    padding:20px;
+    background:#ecf9f0;
+    border:1px solid #28a745;
+    border-radius:10px;
+}
+
+.bonne{
+    color:green;
+    margin-top:10px;
+}
+
+.mauvaise{
+    color:red;
+    margin-top:10px;
+}
+
+.explication{
+    margin-top:5px;
+    font-style:italic;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1 id="titreQuiz"></h1>
+
+<p>
+
+Nom :
+
+<input type="text"
+id="nom"
+placeholder="Votre prénom">
+
+</p>
+
+<form id="quizContainer"></form>
+
+<button onclick="corrigerQuiz()">
+
+Valider le quiz
+
+</button>
+
+<div id="resultat"></div>
+
+</div>
+
+<script>
+
+/************************************************
+MODIFIER UNIQUEMENT CI-DESSOUS
+************************************************/
+const quizTitre =
+"Quiz : Le Chariot";
+
+const quizData = [
+
+{
+question :
+"Quelle est la mission principale du Chariot ?",
+
+reponses : [
+"Comprendre les événements avant d'agir",
+"Prendre les rênes de sa vie et avancer vers son objectif",
+"Trouver un équilibre émotionnel",
+"Transmettre son expérience"
+],
+
+bonne : 1,
+
+explication :
+"Le Chariot marque le passage du choix à l'action. Il représente la capacité à avancer vers un objectif avec détermination."
+},
+
+{
+question :
+"Parmi ces propositions, laquelle correspond le mieux à l'énergie lumière du Chariot ?",
+
+reponses : [
+"Intuition, écoute, réceptivité",
+"Patience, réflexion, introspection",
+"Volonté, détermination, confiance",
+"Harmonie, médiation, réconciliation"
+],
+
+bonne : 2,
+
+explication :
+"Le Chariot utilise sa volonté comme moteur et sa confiance comme carburant."
+},
+
+{
+question :
+"Dans un tirage, le Chariot apparaît en position CONTRE. Quelle interprétation est la plus cohérente ?",
+
+reponses : [
+"Le consultant risque d'aller trop vite ou de foncer sans vérifier sa direction",
+"Le consultant manque de créativité",
+"Le consultant refuse de communiquer",
+"Le consultant a besoin d'étudier davantage"
+],
+
+bonne : 0,
+
+explication :
+"Le Chariot en ombre confond souvent mouvement et progression."
+},
+
+{
+question :
+"Quelle est l'erreur fréquente du Chariot ?",
+
+reponses : [
+"Confondre réflexion et action",
+"Confondre vitesse et progression",
+"Confondre intuition et imagination",
+"Confondre amour et dépendance"
+],
+
+bonne : 1,
+
+explication :
+"Le Chariot croit parfois qu'aller vite signifie forcément avancer."
+},
+
+{
+question :
+"Laquelle de ces phrases résume le mieux le Chariot lumineux ?",
+
+reponses : [
+"Je sais où je vais",
+"J'attends le bon moment",
+"Je cherche la vérité",
+"Je transmets ce que j'ai appris"
+],
+
+bonne : 0,
+
+explication :
+"Le Chariot connaît sa direction et mobilise son énergie pour l'atteindre."
+},
+
+{
+question :
+"Complète la progression initiatique : Amoureux : Je choisis – Chariot : ?",
+
+reponses : [
+"J'équilibre",
+"Je construis",
+"J'avance",
+"Je maîtrise"
+],
+
+bonne : 2,
+
+explication :
+"Dans ton parcours initiatique, le Chariot correspond à la mission : J'avance."
+},
+
+{
+question :
+"Quelle différence fondamentale existe entre l'Amoureux et le Chariot ?",
+
+reponses : [
+"L'Amoureux choisit une direction tandis que le Chariot s'engage dans cette direction",
+"L'Amoureux construit et le Chariot enseigne",
+"L'Amoureux réfléchit alors que le Chariot ressent",
+"Les deux cartes racontent exactement la même étape"
+],
+
+bonne : 0,
+
+explication :
+"L'Amoureux répond à la question : « Que vais-je choisir ? ». Le Chariot répond : « Maintenant, j'avance. »"
+},
+
+{
+question :
+"Le Chariot et l'Impératrice utilisent tous deux leur mental. Quelle est leur différence fondamentale ?",
+
+reponses : [
+"L'Impératrice utilise son mental pour créer et exprimer ; le Chariot utilise son mental pour diriger et avancer",
+"L'Impératrice agit tandis que le Chariot réfléchit",
+"Le Chariot est intuitif alors que l'Impératrice ne l'est pas",
+"L'Impératrice et le Chariot représentent exactement la même fonction mentale"
+],
+
+bonne : 0,
+
+explication :
+"L'Impératrice produit des idées, des mots et des solutions. Le Chariot concentre sa volonté pour diriger une énergie vers un objectif. L'une crée une direction intellectuelle ; l'autre la met en mouvement. Symboliquement, l'Impératrice gouverne son royaume par l'intelligence tandis que le Chariot dirige ses chevaux sans rênes visibles, par la seule maîtrise de sa volonté."
+},
+
+{
+question :
+"Un consultant hésite depuis plusieurs mois à lancer un projet. Tout est prêt mais il n'agit toujours pas. Le Chariot apparaît en conseil. Que suggère-t-il ?",
+
+reponses : [
+"Attendre d'être parfaitement prêt",
+"Abandonner le projet",
+"Passer à l'action et prendre les commandes de la situation",
+"Recommencer entièrement la préparation"
+],
+
+bonne : 2,
+
+explication :
+"Lorsque le Chariot apparaît, le temps de la préparation est généralement terminé. Le moment est venu d'avancer."
+}
+
+];
+
+
+/************************************************
+NE RIEN MODIFIER EN DESSOUS
+************************************************/
+
+document.getElementById("titreQuiz").innerText =
+quizTitre;
+
+const container =
+document.getElementById("quizContainer");
+
+quizData.forEach((q, index)=>{
+
+let html =
+`
+<div class="question">
+
+<h3>
+
+Question ${index+1}
+
+</h3>
+
+<p>${q.question}</p>
+`;
+
+q.reponses.forEach((r, i)=>{
+
+html +=
+`
+<label>
+
+<input
+type="radio"
+name="q${index}"
+value="${i}">
+
+${r}
+
+</label>
+
+<br>
+
+`;
+
+});
+
+html +=
+`
+<div id="feedback${index}"></div>
+
+</div>
+`;
+
+container.innerHTML += html;
+
+});
+
+function corrigerQuiz(){
+
+let score = 0;
+
+quizData.forEach((q,index)=>{
+
+let reponse =
+document.querySelector(
+'input[name="q'+index+'"]:checked'
+);
+
+let feedback =
+document.getElementById(
+"feedback"+index
+);
+
+if(
+reponse &&
+parseInt(reponse.value)
+=== q.bonne
+){
+
+score++;
+
+feedback.innerHTML =
+`
+<div class="bonne">
+
+✅ Bonne réponse
+
+</div>
+
+<div class="explication">
+
+${q.explication}
+
+</div>
+`;
+
+}
+else{
+
+feedback.innerHTML =
+`
+<div class="mauvaise">
+
+❌ Mauvaise réponse
+
+</div>
+
+<div class="explication">
+
+Bonne réponse :
+${q.reponses[q.bonne]}
+
+<br><br>
+
+${q.explication}
+
+</div>
+`;
+
+}
+
+});
+
+let appreciation = "";
+
+if(score === quizData.length){
+
+appreciation =
+"⭐⭐⭐⭐⭐ Maîtrise parfaite";
+
+}
+else if(score >= 4){
+
+appreciation =
+"⭐⭐⭐⭐ Très bonne compréhension";
+
+}
+else if(score >= 3){
+
+appreciation =
+"⭐⭐⭐ Bases acquises";
+
+}
+else if(score >= 2){
+
+appreciation =
+"⭐⭐ À renforcer";
+
+}
+else{
+
+appreciation =
+"⭐ Révision nécessaire";
+
+}
+
+document.getElementById(
+"resultat"
+).style.display="block";
+
+document.getElementById(
+"resultat"
+).innerHTML =
+
+`
+<h2>
+
+Résultat
+
+</h2>
+
+<p>
+
+Score :
+<strong>
+
+${score}/${quizData.length}
+
+</strong>
+
+</p>
+
+<p>
+
+${appreciation}
+
+</p>
+`;
+
+window.scrollTo(
+0,
+document.body.scrollHeight
+);
+
+}
+
+</script>
+
+</body>
+
+</html>

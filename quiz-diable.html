@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>TarotQuizz</title>
+
+<style>
+
+body{
+    font-family: Arial, sans-serif;
+    background:#f5f5f5;
+    margin:0;
+    padding:20px;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+    background:white;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 0 10px rgba(0,0,0,0.15);
+}
+
+h1{
+    text-align:center;
+    color:#2c3e50;
+}
+
+.question{
+    margin-bottom:30px;
+    padding-bottom:20px;
+    border-bottom:1px solid #ddd;
+}
+
+.question h3{
+    color:#34495e;
+}
+
+button{
+    background:#2c3e50;
+    color:white;
+    border:none;
+    padding:15px 25px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:18px;
+}
+
+button:hover{
+    background:#1a252f;
+}
+
+#resultat{
+    display:none;
+    margin-top:30px;
+    padding:20px;
+    background:#ecf9f0;
+    border:1px solid #28a745;
+    border-radius:10px;
+}
+
+.bonne{
+    color:green;
+    margin-top:10px;
+}
+
+.mauvaise{
+    color:red;
+    margin-top:10px;
+}
+
+.explication{
+    margin-top:5px;
+    font-style:italic;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1 id="titreQuiz"></h1>
+
+<p>
+
+Nom :
+
+<input type="text"
+id="nom"
+placeholder="Votre prénom">
+
+</p>
+
+<form id="quizContainer"></form>
+
+<button onclick="corrigerQuiz()">
+
+Valider le quiz
+
+</button>
+
+<div id="resultat"></div>
+
+</div>
+
+<script>
+
+/************************************************
+MODIFIER UNIQUEMENT CI-DESSOUS
+************************************************/
+
+const quizTitre =
+"Quiz : Le Diable";
+
+const quizData = [
+
+{
+question :
+"Quelle est la mission principale du Diable ?",
+
+reponses : [
+"Réprimer ses désirs",
+"Identifier ce qui nous anime profondément et ce qui nous attache",
+"Trouver un équilibre parfait",
+"Abandonner ses passions"
+],
+
+bonne : 1,
+
+explication :
+"Le Diable invite à regarder honnêtement ce qui nous fait vibrer, ce qui nous attire et ce qui motive nos actions."
+},
+
+{
+question :
+"Parmi ces propositions, laquelle correspond le mieux à l'énergie lumière du Diable ?",
+
+reponses : [
+"Passion, désir, énergie de vie",
+"Résignation, renoncement, passivité",
+"Obéissance, conformité, modération",
+"Distance émotionnelle et détachement"
+],
+
+bonne : 0,
+
+explication :
+"Le Diable représente le feu intérieur, la puissance du désir et l'énergie qui met la vie en mouvement."
+},
+
+{
+question :
+"Dans un tirage, le Diable apparaît en position CONTRE. Quelle interprétation est la plus cohérente ?",
+
+reponses : [
+"Le consultant est dominé par ses compulsions ou refuse de voir ses attachements",
+"Le consultant réfléchit trop",
+"Le consultant manque de connaissances",
+"Le consultant doit ralentir"
+],
+
+bonne : 0,
+
+explication :
+"Le Diable en ombre apparaît lorsque l'on devient l'esclave de ce qui devrait simplement nous animer."
+},
+
+{
+question :
+"Quelle est l'erreur fréquente concernant le Diable ?",
+
+reponses : [
+"Croire qu'il représente uniquement le mal ou les défauts",
+"Croire qu'il représente l'équilibre",
+"Croire qu'il symbolise la réflexion",
+"Croire qu'il représente uniquement le travail"
+],
+
+bonne : 0,
+
+explication :
+"Le Diable n'est pas seulement la chaîne. Il est aussi l'énergie, le désir et la vitalité."
+},
+
+{
+question :
+"Laquelle de ces phrases résume le mieux le Diable lumineux ?",
+
+reponses : [
+"Je reconnais ce qui me passionne sans en devenir esclave",
+"Je renonce à tous mes désirs",
+"Je me conforme aux attentes",
+"Je refuse toute forme d'attachement"
+],
+
+bonne : 0,
+
+explication :
+"La lumière du Diable consiste à utiliser son feu intérieur consciemment plutôt qu'à le subir."
+},
+
+{
+question :
+"Complète la progression initiatique : Tempérance : J'harmonise – Diable : ?",
+
+reponses : [
+"Je désire",
+"Je juge",
+"Je ralentis",
+"Je transmets"
+],
+
+bonne : 0,
+
+explication :
+"Dans ton parcours initiatique, le Diable pourrait être résumé par : Je désire, j'ose reconnaître mon moteur."
+},
+
+{
+question :
+"Quelle différence fondamentale existe entre l'Amoureux et le Diable ?",
+
+reponses : [
+"L'Amoureux choisit librement ce qui l'attire ; le Diable révèle ce qui exerce un pouvoir profond sur lui",
+"La même énergie est représentée exactement de la même façon",
+"Le Diable réfléchit alors que l'Amoureux agit",
+"L'Amoureux construit alors que le Diable détruit"
+],
+
+bonne : 0,
+
+explication :
+"L'Amoureux pose la question du choix. Le Diable pose la question de l'attachement et du désir."
+},
+
+{
+question :
+"Quelle différence fondamentale existe entre Tempérance et le Diable ?",
+
+reponses : [
+"Tempérance recherche l'harmonie ; le Diable réveille le feu intérieur",
+"Tempérance accélère ; le Diable ralentit",
+"Le Diable équilibre ; Tempérance provoque",
+"Ces deux cartes représentent exactement la même étape"
+],
+
+bonne : 0,
+
+explication :
+"Tempérance apaise. Le Diable vérifie que l'apaisement n'est pas devenu une extinction du désir."
+},
+
+{
+question :
+"Un conducteur handicapé après un accident ne peut plus vivre la conduite comme avant. Pourtant, lorsqu'il entend un moteur ou voit une belle voiture, quelque chose continue de vibrer profondément en lui. Que vient lui montrer le Diable ?",
+
+reponses : [
+"Qu'il doit oublier définitivement sa passion",
+"Qu'il reste en lui un désir vivant qui demande à être reconnu",
+"Qu'il doit acheter immédiatement une voiture de sport",
+"Qu'il est condamné à revivre le passé"
+],
+
+bonne : 1,
+
+explication :
+"Le Diable rappelle que même lorsqu'une vie change profondément, la passion, le désir et le feu intérieur peuvent demeurer présents."
+},
+
+{
+question :
+"Dans l'histoire de l'automobiliste, quelle question résume le mieux la leçon du Diable ?",
+
+reponses : [
+"Comment éviter tous les risques ?",
+"Comment rester raisonnable ?",
+"Quel est ton moteur ?",
+"Comment ne plus faire d'erreurs ?"
+],
+
+bonne : 2,
+
+explication :
+"Le Diable cherche la source profonde de l'énergie. Il demande : Qu'est-ce qui te fait vibrer ? Qu'est-ce qui te fait te lever le matin ? Qu'est-ce qui vaut suffisamment à tes yeux pour accepter de t'y attacher ?"
+}
+
+];
+
+
+
+/************************************************
+NE RIEN MODIFIER EN DESSOUS
+************************************************/
+
+document.getElementById("titreQuiz").innerText =
+quizTitre;
+
+const container =
+document.getElementById("quizContainer");
+
+quizData.forEach((q, index)=>{
+
+let html =
+`
+<div class="question">
+
+<h3>
+
+Question ${index+1}
+
+</h3>
+
+<p>${q.question}</p>
+`;
+
+q.reponses.forEach((r, i)=>{
+
+html +=
+`
+<label>
+
+<input
+type="radio"
+name="q${index}"
+value="${i}">
+
+${r}
+
+</label>
+
+<br>
+
+`;
+
+});
+
+html +=
+`
+<div id="feedback${index}"></div>
+
+</div>
+`;
+
+container.innerHTML += html;
+
+});
+
+function corrigerQuiz(){
+
+let score = 0;
+
+quizData.forEach((q,index)=>{
+
+let reponse =
+document.querySelector(
+'input[name="q'+index+'"]:checked'
+);
+
+let feedback =
+document.getElementById(
+"feedback"+index
+);
+
+if(
+reponse &&
+parseInt(reponse.value)
+=== q.bonne
+){
+
+score++;
+
+feedback.innerHTML =
+`
+<div class="bonne">
+
+✅ Bonne réponse
+
+</div>
+
+<div class="explication">
+
+${q.explication}
+
+</div>
+`;
+
+}
+else{
+
+feedback.innerHTML =
+`
+<div class="mauvaise">
+
+❌ Mauvaise réponse
+
+</div>
+
+<div class="explication">
+
+Bonne réponse :
+${q.reponses[q.bonne]}
+
+<br><br>
+
+${q.explication}
+
+</div>
+`;
+
+}
+
+});
+
+let appreciation = "";
+
+if(score === quizData.length){
+
+appreciation =
+"⭐⭐⭐⭐⭐ Maîtrise parfaite";
+
+}
+else if(score >= 4){
+
+appreciation =
+"⭐⭐⭐⭐ Très bonne compréhension";
+
+}
+else if(score >= 3){
+
+appreciation =
+"⭐⭐⭐ Bases acquises";
+
+}
+else if(score >= 2){
+
+appreciation =
+"⭐⭐ À renforcer";
+
+}
+else{
+
+appreciation =
+"⭐ Révision nécessaire";
+
+}
+
+document.getElementById(
+"resultat"
+).style.display="block";
+
+document.getElementById(
+"resultat"
+).innerHTML =
+
+`
+<h2>
+
+Résultat
+
+</h2>
+
+<p>
+
+Score :
+<strong>
+
+${score}/${quizData.length}
+
+</strong>
+
+</p>
+
+<p>
+
+${appreciation}
+
+</p>
+`;
+
+window.scrollTo(
+0,
+document.body.scrollHeight
+);
+
+}
+
+</script>
+
+</body>
+
+</html>

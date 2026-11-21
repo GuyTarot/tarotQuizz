@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>TarotQuizz</title>
+
+<style>
+
+body{
+    font-family: Arial, sans-serif;
+    background:#f5f5f5;
+    margin:0;
+    padding:20px;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+    background:white;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 0 10px rgba(0,0,0,0.15);
+}
+
+h1{
+    text-align:center;
+    color:#2c3e50;
+}
+
+.question{
+    margin-bottom:30px;
+    padding-bottom:20px;
+    border-bottom:1px solid #ddd;
+}
+
+.question h3{
+    color:#34495e;
+}
+
+button{
+    background:#2c3e50;
+    color:white;
+    border:none;
+    padding:15px 25px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:18px;
+}
+
+button:hover{
+    background:#1a252f;
+}
+
+#resultat{
+    display:none;
+    margin-top:30px;
+    padding:20px;
+    background:#ecf9f0;
+    border:1px solid #28a745;
+    border-radius:10px;
+}
+
+.bonne{
+    color:green;
+    margin-top:10px;
+}
+
+.mauvaise{
+    color:red;
+    margin-top:10px;
+}
+
+.explication{
+    margin-top:5px;
+    font-style:italic;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1 id="titreQuiz"></h1>
+
+<p>
+
+Nom :
+
+<input type="text"
+id="nom"
+placeholder="Votre prénom">
+
+</p>
+
+<form id="quizContainer"></form>
+
+<button onclick="corrigerQuiz()">
+
+Valider le quiz
+
+</button>
+
+<div id="resultat"></div>
+
+</div>
+
+<script>
+
+/************************************************
+MODIFIER UNIQUEMENT CI-DESSOUS
+************************************************/
+
+const quizTitre =
+"Quiz : L'Arcane Sans Nom";
+
+const quizData = [
+
+{
+question :
+"Quelle est la mission principale de l'Arcane Sans Nom ?",
+
+reponses : [
+"Ralentir et réfléchir",
+"Transformer profondément ce qui ne peut plus continuer comme avant",
+"Trouver un nouvel équilibre",
+"Transmettre son expérience"
+],
+
+bonne : 1,
+
+explication :
+"L'Arcane Sans Nom représente une transformation inévitable. Il coupe ce qui doit disparaître afin de permettre une renaissance."
+},
+
+{
+question :
+"Parmi ces propositions, laquelle correspond le mieux à l'énergie lumière de l'Arcane Sans Nom ?",
+
+reponses : [
+"Transformation, libération, renouveau",
+"Patience, contemplation, étude",
+"Stabilité, sécurité, confort",
+"Communication, créativité, expression"
+],
+
+bonne : 0,
+
+explication :
+"L'Arcane XIII ne détruit pas par plaisir. Il transforme pour permettre l'émergence d'autre chose."
+},
+
+{
+question :
+"Dans un tirage, l'Arcane Sans Nom apparaît en position CONTRE. Quelle interprétation est la plus cohérente ?",
+
+reponses : [
+"Le consultant résiste à un changement devenu nécessaire",
+"Le consultant manque de connaissances",
+"Le consultant agit trop vite",
+"Le consultant doit voyager"
+],
+
+bonne : 0,
+
+explication :
+"L'ombre de l'Arcane XIII apparaît souvent lorsqu'une personne tente de conserver une situation déjà terminée."
+},
+
+{
+question :
+"Quelle est l'erreur fréquente concernant l'Arcane Sans Nom ?",
+
+reponses : [
+"Croire qu'il annonce uniquement une catastrophe",
+"Croire qu'il représente l'amour",
+"Croire qu'il apporte la réussite financière",
+"Croire qu'il ralentit le temps"
+],
+
+bonne : 0,
+
+explication :
+"L'Arcane XIII ne parle pas forcément de destruction. Il parle avant tout de transformation."
+},
+
+{
+question :
+"Laquelle de ces phrases résume le mieux l'Arcane Sans Nom lumineux ?",
+
+reponses : [
+"Je conserve ce que je connais",
+"Je transforme ce qui doit l'être",
+"Je contrôle les événements",
+"J'attends une opportunité"
+],
+
+bonne : 1,
+
+explication :
+"L'Arcane Sans Nom accepte la fin d'un cycle lorsqu'elle est nécessaire."
+},
+
+{
+question :
+"Complète la progression initiatique : Pendu : Je lâche prise – Arcane Sans Nom : ?",
+
+reponses : [
+"J'harmonise",
+"Je transforme",
+"Je partage",
+"Je rayonne"
+],
+
+bonne : 1,
+
+explication :
+"Dans ton cycle initiatique, l'Arcane Sans Nom correspond à la mission : Je transforme."
+},
+
+{
+question :
+"Quelle différence fondamentale existe entre le Pendu et l'Arcane Sans Nom ?",
+
+reponses : [
+"Le Pendu suspend l'ancienne vie ; l'Arcane Sans Nom la transforme",
+"Le Pendu agit ; l'Arcane Sans Nom attend",
+"Le Pendu construit ; l'Arcane Sans Nom ralentit",
+"Ces deux cartes racontent exactement la même étape"
+],
+
+bonne : 0,
+
+explication :
+"Le Pendu prépare le changement. L'Arcane Sans Nom réalise le changement."
+},
+
+{
+question :
+"Quelle différence fondamentale existe entre la Roue de Fortune et l'Arcane Sans Nom ?",
+
+reponses : [
+"La Roue offre une nouvelle chance ; l'Arcane Sans Nom exige une transformation",
+"La Roue détruit ; l'Arcane Sans Nom construit",
+"La Roue ralentit ; l'Arcane Sans Nom accélère",
+"Les deux cartes représentent exactement la même chose"
+],
+
+bonne : 0,
+
+explication :
+"La Roue remet le mouvement en marche. L'Arcane XIII coupe ce qui ne peut plus continuer."
+},
+
+{
+question :
+"Après un grave accident, un conducteur ne peut plus utiliser son ancien véhicule ni reprendre sa vie d'avant. Il doit apprendre à conduire un véhicule adapté et repenser totalement sa façon de vivre. Quelle est la lecture la plus juste de l'Arcane Sans Nom ?",
+
+reponses : [
+"Le conducteur attend simplement la fin d'une période difficile",
+"Le conducteur traverse une transformation profonde qui l'oblige à devenir quelqu'un d'autre",
+"Le conducteur reçoit une simple punition",
+"Le conducteur retrouvera exactement sa vie précédente"
+],
+
+bonne : 1,
+
+explication :
+"L'Arcane XIII ne demande pas de revenir en arrière. Il invite à devenir autre chose. L'ancien conducteur disparaît pour laisser place à une nouvelle identité compatible avec la réalité présente."
+},
+
+{
+question :
+"Dans le récit de l'automobiliste, quelle phrase résume le mieux le passage du Pendu à l'Arcane Sans Nom ?",
+
+reponses : [
+"Je suis bloqué, puis je recommence exactement comme avant",
+"Je suis suspendu, puis je me transforme",
+"Je suis puni, puis récompensé",
+"Je ralentis, puis j'accélère"
+],
+
+bonne : 1,
+
+explication :
+"Le Pendu suspend l'ancien monde. L'Arcane Sans Nom crée les conditions d'un nouveau monde. L'un prépare la transformation ; l'autre l'accomplit."
+}
+
+];
+
+/************************************************
+NE RIEN MODIFIER EN DESSOUS
+************************************************/
+
+document.getElementById("titreQuiz").innerText =
+quizTitre;
+
+const container =
+document.getElementById("quizContainer");
+
+quizData.forEach((q, index)=>{
+
+let html =
+`
+<div class="question">
+
+<h3>
+
+Question ${index+1}
+
+</h3>
+
+<p>${q.question}</p>
+`;
+
+q.reponses.forEach((r, i)=>{
+
+html +=
+`
+<label>
+
+<input
+type="radio"
+name="q${index}"
+value="${i}">
+
+${r}
+
+</label>
+
+<br>
+
+`;
+
+});
+
+html +=
+`
+<div id="feedback${index}"></div>
+
+</div>
+`;
+
+container.innerHTML += html;
+
+});
+
+function corrigerQuiz(){
+
+let score = 0;
+
+quizData.forEach((q,index)=>{
+
+let reponse =
+document.querySelector(
+'input[name="q'+index+'"]:checked'
+);
+
+let feedback =
+document.getElementById(
+"feedback"+index
+);
+
+if(
+reponse &&
+parseInt(reponse.value)
+=== q.bonne
+){
+
+score++;
+
+feedback.innerHTML =
+`
+<div class="bonne">
+
+✅ Bonne réponse
+
+</div>
+
+<div class="explication">
+
+${q.explication}
+
+</div>
+`;
+
+}
+else{
+
+feedback.innerHTML =
+`
+<div class="mauvaise">
+
+❌ Mauvaise réponse
+
+</div>
+
+<div class="explication">
+
+Bonne réponse :
+${q.reponses[q.bonne]}
+
+<br><br>
+
+${q.explication}
+
+</div>
+`;
+
+}
+
+});
+
+let appreciation = "";
+
+if(score === quizData.length){
+
+appreciation =
+"⭐⭐⭐⭐⭐ Maîtrise parfaite";
+
+}
+else if(score >= 4){
+
+appreciation =
+"⭐⭐⭐⭐ Très bonne compréhension";
+
+}
+else if(score >= 3){
+
+appreciation =
+"⭐⭐⭐ Bases acquises";
+
+}
+else if(score >= 2){
+
+appreciation =
+"⭐⭐ À renforcer";
+
+}
+else{
+
+appreciation =
+"⭐ Révision nécessaire";
+
+}
+
+document.getElementById(
+"resultat"
+).style.display="block";
+
+document.getElementById(
+"resultat"
+).innerHTML =
+
+`
+<h2>
+
+Résultat
+
+</h2>
+
+<p>
+
+Score :
+<strong>
+
+${score}/${quizData.length}
+
+</strong>
+
+</p>
+
+<p>
+
+${appreciation}
+
+</p>
+`;
+
+window.scrollTo(
+0,
+document.body.scrollHeight
+);
+
+}
+
+</script>
+
+</body>
+
+</html>

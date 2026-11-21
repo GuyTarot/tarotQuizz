@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>TarotQuizz</title>
+
+<style>
+
+body{
+    font-family: Arial, sans-serif;
+    background:#f5f5f5;
+    margin:0;
+    padding:20px;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+    background:white;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 0 10px rgba(0,0,0,0.15);
+}
+
+h1{
+    text-align:center;
+    color:#2c3e50;
+}
+
+.question{
+    margin-bottom:30px;
+    padding-bottom:20px;
+    border-bottom:1px solid #ddd;
+}
+
+.question h3{
+    color:#34495e;
+}
+
+button{
+    background:#2c3e50;
+    color:white;
+    border:none;
+    padding:15px 25px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:18px;
+}
+
+button:hover{
+    background:#1a252f;
+}
+
+#resultat{
+    display:none;
+    margin-top:30px;
+    padding:20px;
+    background:#ecf9f0;
+    border:1px solid #28a745;
+    border-radius:10px;
+}
+
+.bonne{
+    color:green;
+    margin-top:10px;
+}
+
+.mauvaise{
+    color:red;
+    margin-top:10px;
+}
+
+.explication{
+    margin-top:5px;
+    font-style:italic;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1 id="titreQuiz"></h1>
+
+<p>
+
+Nom :
+
+<input type="text"
+id="nom"
+placeholder="Votre prénom">
+
+</p>
+
+<form id="quizContainer"></form>
+
+<button onclick="corrigerQuiz()">
+
+Valider le quiz
+
+</button>
+
+<div id="resultat"></div>
+
+</div>
+
+<script>
+
+/************************************************
+MODIFIER UNIQUEMENT CI-DESSOUS
+************************************************/
+
+const quizTitre =
+"Quiz : La Force";
+
+const quizData = [
+
+{
+question :
+"Quelle est la mission principale de la Force ?",
+
+reponses : [
+"Prendre le pouvoir sur les autres",
+"Maîtriser ses impulsions et canaliser son énergie",
+"Avancer plus vite",
+"Transformer ce qui doit disparaître"
+],
+
+bonne : 1,
+
+explication :
+"La Force ne consiste pas à être le plus fort. Elle consiste à maîtriser sa puissance, ses émotions et ses impulsions."
+},
+
+{
+question :
+"Parmi ces propositions, laquelle correspond le mieux à l'énergie lumière de la Force ?",
+
+reponses : [
+"Maîtrise de soi, courage, canalisation",
+"Vitesse, ambition, domination",
+"Patience, retrait, isolement",
+"Chance, hasard, opportunité"
+],
+
+bonne : 0,
+
+explication :
+"La Force maîtrise son énergie sans la réprimer. Elle agit avec calme et conscience."
+},
+
+{
+question :
+"Dans un tirage, la Force apparaît en position CONTRE. Quelle interprétation est la plus cohérente ?",
+
+reponses : [
+"Le consultant est peut-être dominé par ses pulsions ou ses réactions",
+"Le consultant manque d'intelligence",
+"Le consultant doit voyager davantage",
+"Le consultant est trop prudent"
+],
+
+bonne : 0,
+
+explication :
+"La Force en ombre apparaît lorsque les instincts prennent le dessus sur la conscience."
+},
+
+{
+question :
+"Quelle est l'erreur fréquente de la Force ?",
+
+reponses : [
+"Confondre force et domination",
+"Confondre réflexion et intuition",
+"Confondre sagesse et lenteur",
+"Confondre choix et décision"
+],
+
+bonne : 0,
+
+explication :
+"La véritable Force n'a pas besoin d'écraser ou de dominer. Elle maîtrise sans violence."
+},
+
+{
+question :
+"Laquelle de ces phrases résume le mieux la Force lumineuse ?",
+
+reponses : [
+"Je maîtrise ma puissance",
+"Je vais plus vite que les autres",
+"Je contrôle tout",
+"Je fais ce qui me plaît"
+],
+
+bonne : 0,
+
+explication :
+"La Force lumineuse sait quand agir et quand retenir son énergie."
+},
+
+{
+question :
+"Complète la progression initiatique : Roue de Fortune : J'évolue – Force : ?",
+
+reponses : [
+"Je transforme",
+"Je maîtrise",
+"Je ressens",
+"Je partage"
+],
+
+bonne : 1,
+
+explication :
+"Dans ton parcours initiatique, la Force correspond à la mission : Je maîtrise."
+},
+
+{
+question :
+"Quelle différence fondamentale existe entre le Chariot et la Force ?",
+
+reponses : [
+"Le Chariot dirige une énergie extérieure ; la Force maîtrise une énergie intérieure",
+"Le Chariot est émotionnel alors que la Force est mentale",
+"La Force va plus vite que le Chariot",
+"Les deux cartes représentent exactement la même chose"
+],
+
+bonne : 0,
+
+explication :
+"Le Chariot conduit ses chevaux. La Force apprivoise son lion. Le premier dirige un mouvement ; la seconde maîtrise l'impulsion qui crée ce mouvement."
+},
+
+{
+question :
+"Un conducteur possède une voiture beaucoup plus puissante que ses capacités réelles. Il cherche régulièrement à montrer ce dont son véhicule est capable. Quel est l'enseignement principal de la Force dans cette situation ?",
+
+reponses : [
+"Acheter un véhicule encore plus puissant",
+"Prouver sa supériorité aux autres conducteurs",
+"Apprendre à maîtriser sa puissance avant de vouloir l'utiliser pleinement",
+"Changer de voiture immédiatement"
+],
+
+bonne : 2,
+
+explication :
+"La Force rappelle que posséder une puissance n'est pas la même chose que savoir l'utiliser."
+},
+
+{
+question :
+"Un conducteur récupère son permis après un stage de récupération de points. Quelques semaines plus tard, il recommence à rouler vite, se met en colère contre les autres automobilistes et prend des risques inutiles. La Force apparaît en conseil. Que représente-t-elle ?",
+
+reponses : [
+"Une invitation à rouler davantage",
+"Une invitation à utiliser sa nouvelle chance avec davantage de maîtrise",
+"Une sanction administrative",
+"Une période de malchance"
+],
+
+bonne : 1,
+
+explication :
+"La Roue lui a offert une nouvelle chance. La Force lui demande désormais de maîtriser ses impulsions. La question n'est plus : 'Puis-je conduire ?' mais : 'Suis-je capable de me conduire moi-même ?'"
+}
+
+];
+
+/************************************************
+NE RIEN MODIFIER EN DESSOUS
+************************************************/
+
+document.getElementById("titreQuiz").innerText =
+quizTitre;
+
+const container =
+document.getElementById("quizContainer");
+
+quizData.forEach((q, index)=>{
+
+let html =
+`
+<div class="question">
+
+<h3>
+
+Question ${index+1}
+
+</h3>
+
+<p>${q.question}</p>
+`;
+
+q.reponses.forEach((r, i)=>{
+
+html +=
+`
+<label>
+
+<input
+type="radio"
+name="q${index}"
+value="${i}">
+
+${r}
+
+</label>
+
+<br>
+
+`;
+
+});
+
+html +=
+`
+<div id="feedback${index}"></div>
+
+</div>
+`;
+
+container.innerHTML += html;
+
+});
+
+function corrigerQuiz(){
+
+let score = 0;
+
+quizData.forEach((q,index)=>{
+
+let reponse =
+document.querySelector(
+'input[name="q'+index+'"]:checked'
+);
+
+let feedback =
+document.getElementById(
+"feedback"+index
+);
+
+if(
+reponse &&
+parseInt(reponse.value)
+=== q.bonne
+){
+
+score++;
+
+feedback.innerHTML =
+`
+<div class="bonne">
+
+✅ Bonne réponse
+
+</div>
+
+<div class="explication">
+
+${q.explication}
+
+</div>
+`;
+
+}
+else{
+
+feedback.innerHTML =
+`
+<div class="mauvaise">
+
+❌ Mauvaise réponse
+
+</div>
+
+<div class="explication">
+
+Bonne réponse :
+${q.reponses[q.bonne]}
+
+<br><br>
+
+${q.explication}
+
+</div>
+`;
+
+}
+
+});
+
+let appreciation = "";
+
+if(score === quizData.length){
+
+appreciation =
+"⭐⭐⭐⭐⭐ Maîtrise parfaite";
+
+}
+else if(score >= 4){
+
+appreciation =
+"⭐⭐⭐⭐ Très bonne compréhension";
+
+}
+else if(score >= 3){
+
+appreciation =
+"⭐⭐⭐ Bases acquises";
+
+}
+else if(score >= 2){
+
+appreciation =
+"⭐⭐ À renforcer";
+
+}
+else{
+
+appreciation =
+"⭐ Révision nécessaire";
+
+}
+
+document.getElementById(
+"resultat"
+).style.display="block";
+
+document.getElementById(
+"resultat"
+).innerHTML =
+
+`
+<h2>
+
+Résultat
+
+</h2>
+
+<p>
+
+Score :
+<strong>
+
+${score}/${quizData.length}
+
+</strong>
+
+</p>
+
+<p>
+
+${appreciation}
+
+</p>
+`;
+
+window.scrollTo(
+0,
+document.body.scrollHeight
+);
+
+}
+
+</script>
+
+</body>
+
+</html>

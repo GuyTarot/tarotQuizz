@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>TarotQuizz</title>
+
+<style>
+
+body{
+    font-family: Arial, sans-serif;
+    background:#f5f5f5;
+    margin:0;
+    padding:20px;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+    background:white;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 0 10px rgba(0,0,0,0.15);
+}
+
+h1{
+    text-align:center;
+    color:#2c3e50;
+}
+
+.question{
+    margin-bottom:30px;
+    padding-bottom:20px;
+    border-bottom:1px solid #ddd;
+}
+
+.question h3{
+    color:#34495e;
+}
+
+button{
+    background:#2c3e50;
+    color:white;
+    border:none;
+    padding:15px 25px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:18px;
+}
+
+button:hover{
+    background:#1a252f;
+}
+
+#resultat{
+    display:none;
+    margin-top:30px;
+    padding:20px;
+    background:#ecf9f0;
+    border:1px solid #28a745;
+    border-radius:10px;
+}
+
+.bonne{
+    color:green;
+    margin-top:10px;
+}
+
+.mauvaise{
+    color:red;
+    margin-top:10px;
+}
+
+.explication{
+    margin-top:5px;
+    font-style:italic;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1 id="titreQuiz"></h1>
+
+<p>
+
+Nom :
+
+<input type="text"
+id="nom"
+placeholder="Votre prénom">
+
+</p>
+
+<form id="quizContainer"></form>
+
+<button onclick="corrigerQuiz()">
+
+Valider le quiz
+
+</button>
+
+<div id="resultat"></div>
+
+</div>
+
+<script>
+
+/************************************************
+MODIFIER UNIQUEMENT CI-DESSOUS
+************************************************/
+
+const quizTitre =
+"Quiz : Le Pape";
+
+const quizData = [
+
+{
+question :
+"Quelle est la mission principale du Pape ?",
+
+reponses : [
+"Construire une structure solide",
+"S'engager dans une direction",
+"Transmettre une expérience, un savoir ou une sagesse",
+"Accepter une transformation profonde"
+],
+
+bonne : 2,
+
+explication :
+"Le Pape est l'arcane de la transmission. Il partage ce qui a été compris et expérimenté afin que cela puisse servir à d'autres."
+},
+
+{
+question :
+"Parmi ces propositions, laquelle correspond le mieux à l'énergie lumière du Pape ?",
+
+reponses : [
+"Transmission, sagesse, bienveillance",
+"Conquête, ambition, performance",
+"Solitude, introspection, retrait",
+"Désir, passion, possession"
+],
+
+bonne : 0,
+
+explication :
+"Le Pape éclaire, conseille et accompagne. Il transmet sans imposer et partage son expérience avec bienveillance."
+},
+
+{
+question :
+"Dans un tirage, le Pape apparaît en position CONTRE. Quelle interprétation est la plus cohérente ?",
+
+reponses : [
+"Le consultant agit trop vite",
+"Le consultant risque d'imposer sa vision ou de suivre aveuglément celle d'un autre",
+"Le consultant manque de créativité",
+"Une opportunité professionnelle est garantie"
+],
+
+bonne : 1,
+
+explication :
+"L'ombre du Pape apparaît lorsqu'une autorité devient excessive ou lorsqu'une personne renonce à son propre discernement."
+},
+
+{
+question :
+"Quelle est l'erreur fréquente du Pape ?",
+
+reponses : [
+"Confondre vitesse et efficacité",
+"Confondre intuition et émotion",
+"Confondre sagesse et certitude",
+"Confondre liberté et indépendance"
+],
+
+bonne : 2,
+
+explication :
+"Le Pape peut parfois croire que son expérience lui donne toujours raison. La sagesse véritable reste ouverte à l'apprentissage."
+},
+
+{
+question :
+"Laquelle de ces phrases résume le mieux le Pape lumineux ?",
+
+reponses : [
+"J'avance sans me retourner",
+"Je partage ce que j'ai compris",
+"Je me laisse porter par le hasard",
+"Je transforme ce qui doit mourir"
+],
+
+bonne : 1,
+
+explication :
+"Le Pape transmet ce qu'il a intégré au cours de son propre cheminement."
+},
+
+{
+question :
+"Complète la progression initiatique : Empereur : Je construis – Pape : ?",
+
+reponses : [
+"Je transmets",
+"Je choisis",
+"Je maîtrise",
+"Je rayonne"
+],
+
+bonne : 0,
+
+explication :
+"Dans ton cycle initiatique, le Pape correspond à la mission : Je transmets."
+},
+
+{
+question :
+"Une consultante possède quinze années d'expérience dans son métier et on lui propose de former de nouveaux collaborateurs. Le Pape apparaît en conseil. Que suggère-t-il ?",
+
+reponses : [
+"Refuser et garder son savoir pour elle",
+"Changer immédiatement de métier",
+"Transmettre son expérience et accompagner les autres",
+"Éviter toute responsabilité"
+],
+
+bonne : 2,
+
+explication :
+"Le Pape apparaît souvent lorsqu'il est temps de transmettre ce qui a été appris par l'expérience."
+}
+
+];
+
+/************************************************
+NE RIEN MODIFIER EN DESSOUS
+************************************************/
+
+document.getElementById("titreQuiz").innerText =
+quizTitre;
+
+const container =
+document.getElementById("quizContainer");
+
+quizData.forEach((q, index)=>{
+
+let html =
+`
+<div class="question">
+
+<h3>
+
+Question ${index+1}
+
+</h3>
+
+<p>${q.question}</p>
+`;
+
+q.reponses.forEach((r, i)=>{
+
+html +=
+`
+<label>
+
+<input
+type="radio"
+name="q${index}"
+value="${i}">
+
+${r}
+
+</label>
+
+<br>
+
+`;
+
+});
+
+html +=
+`
+<div id="feedback${index}"></div>
+
+</div>
+`;
+
+container.innerHTML += html;
+
+});
+
+function corrigerQuiz(){
+
+let score = 0;
+
+quizData.forEach((q,index)=>{
+
+let reponse =
+document.querySelector(
+'input[name="q'+index+'"]:checked'
+);
+
+let feedback =
+document.getElementById(
+"feedback"+index
+);
+
+if(
+reponse &&
+parseInt(reponse.value)
+=== q.bonne
+){
+
+score++;
+
+feedback.innerHTML =
+`
+<div class="bonne">
+
+✅ Bonne réponse
+
+</div>
+
+<div class="explication">
+
+${q.explication}
+
+</div>
+`;
+
+}
+else{
+
+feedback.innerHTML =
+`
+<div class="mauvaise">
+
+❌ Mauvaise réponse
+
+</div>
+
+<div class="explication">
+
+Bonne réponse :
+${q.reponses[q.bonne]}
+
+<br><br>
+
+${q.explication}
+
+</div>
+`;
+
+}
+
+});
+
+let appreciation = "";
+
+if(score === quizData.length){
+
+appreciation =
+"⭐⭐⭐⭐⭐ Maîtrise parfaite";
+
+}
+else if(score >= 4){
+
+appreciation =
+"⭐⭐⭐⭐ Très bonne compréhension";
+
+}
+else if(score >= 3){
+
+appreciation =
+"⭐⭐⭐ Bases acquises";
+
+}
+else if(score >= 2){
+
+appreciation =
+"⭐⭐ À renforcer";
+
+}
+else{
+
+appreciation =
+"⭐ Révision nécessaire";
+
+}
+
+document.getElementById(
+"resultat"
+).style.display="block";
+
+document.getElementById(
+"resultat"
+).innerHTML =
+
+`
+<h2>
+
+Résultat
+
+</h2>
+
+<p>
+
+Score :
+<strong>
+
+${score}/${quizData.length}
+
+</strong>
+
+</p>
+
+<p>
+
+${appreciation}
+
+</p>
+`;
+
+window.scrollTo(
+0,
+document.body.scrollHeight
+);
+
+}
+
+</script>
+
+</body>
+
+</html>

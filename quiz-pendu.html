@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>TarotQuizz</title>
+
+<style>
+
+body{
+    font-family: Arial, sans-serif;
+    background:#f5f5f5;
+    margin:0;
+    padding:20px;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+    background:white;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 0 10px rgba(0,0,0,0.15);
+}
+
+h1{
+    text-align:center;
+    color:#2c3e50;
+}
+
+.question{
+    margin-bottom:30px;
+    padding-bottom:20px;
+    border-bottom:1px solid #ddd;
+}
+
+.question h3{
+    color:#34495e;
+}
+
+button{
+    background:#2c3e50;
+    color:white;
+    border:none;
+    padding:15px 25px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:18px;
+}
+
+button:hover{
+    background:#1a252f;
+}
+
+#resultat{
+    display:none;
+    margin-top:30px;
+    padding:20px;
+    background:#ecf9f0;
+    border:1px solid #28a745;
+    border-radius:10px;
+}
+
+.bonne{
+    color:green;
+    margin-top:10px;
+}
+
+.mauvaise{
+    color:red;
+    margin-top:10px;
+}
+
+.explication{
+    margin-top:5px;
+    font-style:italic;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1 id="titreQuiz"></h1>
+
+<p>
+
+Nom :
+
+<input type="text"
+id="nom"
+placeholder="Votre prénom">
+
+</p>
+
+<form id="quizContainer"></form>
+
+<button onclick="corrigerQuiz()">
+
+Valider le quiz
+
+</button>
+
+<div id="resultat"></div>
+
+</div>
+
+<script>
+
+/************************************************
+MODIFIER UNIQUEMENT CI-DESSOUS
+************************************************/
+
+const quizTitre =
+"Quiz : Le Pendu";
+
+const quizData = [
+
+{
+question :
+"Quelle est la mission principale du Pendu ?",
+
+reponses : [
+"Accélérer le changement",
+"Accepter l'arrêt et changer de regard",
+"Prendre le contrôle de la situation",
+"Faire un choix définitif"
+],
+
+bonne : 1,
+
+explication :
+"Le Pendu représente l'acceptation d'une période de suspension. Il ne peut plus avancer comme avant et doit regarder sa situation autrement."
+},
+
+{
+question :
+"Parmi ces propositions, laquelle correspond le mieux à l'énergie lumière du Pendu ?",
+
+reponses : [
+"Patience, lâcher-prise, nouvelle perspective",
+"Volonté, conquête, ambition",
+"Contrôle, autorité, domination",
+"Rapidité, efficacité, performance"
+],
+
+bonne : 0,
+
+explication :
+"Le Pendu accepte de ne plus maîtriser immédiatement la situation afin de permettre une transformation intérieure."
+},
+
+{
+question :
+"Dans un tirage, le Pendu apparaît en position CONTRE. Quelle interprétation est la plus cohérente ?",
+
+reponses : [
+"Le consultant refuse d'accepter ce qui ne peut pas être changé pour l'instant",
+"Le consultant va trop vite",
+"Le consultant manque d'énergie physique",
+"Le consultant doit changer de profession"
+],
+
+bonne : 0,
+
+explication :
+"L'ombre du Pendu consiste souvent à lutter contre une immobilisation inévitable."
+},
+
+{
+question :
+"Quelle est l'erreur fréquente du Pendu ?",
+
+reponses : [
+"Confondre pause et abandon",
+"Confondre désir et besoin",
+"Confondre autorité et responsabilité",
+"Confondre intuition et émotion"
+],
+
+bonne : 0,
+
+explication :
+"Le Pendu ne renonce pas. Il accepte simplement qu'il existe un temps où l'action doit céder la place à l'intégration."
+},
+
+{
+question :
+"Laquelle de ces phrases résume le mieux le Pendu lumineux ?",
+
+reponses : [
+"Je ralentis pour comprendre autrement",
+"Je domine les événements",
+"J'avance malgré tout",
+"Je transforme ce qui doit mourir"
+],
+
+bonne : 0,
+
+explication :
+"Le Pendu découvre qu'il existe des situations qui ne peuvent être résolues par davantage d'action."
+},
+
+{
+question :
+"Complète la progression initiatique : Force : Je maîtrise – Pendu : ?",
+
+reponses : [
+"Je lâche prise",
+"Je transforme",
+"Je rayonne",
+"J'équilibre"
+],
+
+bonne : 0,
+
+explication :
+"Dans ton parcours initiatique, le Pendu correspond à la mission : Je lâche prise."
+},
+
+{
+question :
+"Quelle différence fondamentale existe entre l'Ermite et le Pendu ?",
+
+reponses : [
+"L'Ermite avance lentement tandis que le Pendu accepte l'arrêt du mouvement",
+"L'Ermite agit vite tandis que le Pendu agit lentement",
+"Le Pendu cherche alors que l'Ermite choisit",
+"Ces deux cartes racontent exactement la même chose"
+],
+
+bonne : 0,
+
+explication :
+"L'Ermite continue son chemin à son rythme. Le Pendu ne peut plus avancer et doit accepter cette suspension."
+},
+
+{
+question :
+"Quelle différence fondamentale existe entre la Force et le Pendu ?",
+
+reponses : [
+"La Force maîtrise le mouvement tandis que le Pendu accepte de ne plus pouvoir le maîtriser",
+"La Force est passive alors que le Pendu agit",
+"Le Pendu domine ses pulsions tandis que la Force les subit",
+"Il n'existe aucune différence importante"
+],
+
+bonne : 0,
+
+explication :
+"La Force agit encore sur les événements. Le Pendu découvre qu'il existe des situations où aucune volonté ne permet d'accélérer le processus."
+},
+
+{
+question :
+"Un conducteur provoque un grave accident. Son véhicule est détruit et il reste plusieurs mois immobilisé. Il dépend désormais des autres pour se déplacer et doit accepter un long temps de rééducation avant d'espérer reconduire. Quelle carte décrit le mieux cette étape ?",
+
+reponses : [
+"Le Chariot",
+"La Roue de Fortune",
+"Le Pendu",
+"La Justice"
+],
+
+bonne : 2,
+
+explication :
+"Le Chariot avançait. L'Ermite ralentissait. Le Pendu s'arrête. Notre conducteur ne peut plus agir comme avant. Il dépend des autres et doit accepter qu'une partie de la transformation se fasse pendant cette période d'immobilisation."
+},
+
+{
+question :
+"Dans l'image de l'automobiliste, pourquoi le Pendu peut-il être comparé à une période d'hospitalisation ou d'incarcération ?",
+
+reponses : [
+"Parce qu'il gagne davantage de liberté",
+"Parce qu'il est obligé de suspendre son mouvement et dépend d'un cadre extérieur",
+"Parce qu'il conduit plus lentement",
+"Parce qu'il récupère immédiatement son permis"
+],
+
+bonne : 1,
+
+explication :
+"Le Pendu est suspendu. À l'hôpital comme en prison, le rythme personnel cesse d'être maître de la situation. Il faut attendre, intégrer et laisser le temps accomplir son travail."
+}
+
+];
+
+/************************************************
+NE RIEN MODIFIER EN DESSOUS
+************************************************/
+
+document.getElementById("titreQuiz").innerText =
+quizTitre;
+
+const container =
+document.getElementById("quizContainer");
+
+quizData.forEach((q, index)=>{
+
+let html =
+`
+<div class="question">
+
+<h3>
+
+Question ${index+1}
+
+</h3>
+
+<p>${q.question}</p>
+`;
+
+q.reponses.forEach((r, i)=>{
+
+html +=
+`
+<label>
+
+<input
+type="radio"
+name="q${index}"
+value="${i}">
+
+${r}
+
+</label>
+
+<br>
+
+`;
+
+});
+
+html +=
+`
+<div id="feedback${index}"></div>
+
+</div>
+`;
+
+container.innerHTML += html;
+
+});
+
+function corrigerQuiz(){
+
+let score = 0;
+
+quizData.forEach((q,index)=>{
+
+let reponse =
+document.querySelector(
+'input[name="q'+index+'"]:checked'
+);
+
+let feedback =
+document.getElementById(
+"feedback"+index
+);
+
+if(
+reponse &&
+parseInt(reponse.value)
+=== q.bonne
+){
+
+score++;
+
+feedback.innerHTML =
+`
+<div class="bonne">
+
+✅ Bonne réponse
+
+</div>
+
+<div class="explication">
+
+${q.explication}
+
+</div>
+`;
+
+}
+else{
+
+feedback.innerHTML =
+`
+<div class="mauvaise">
+
+❌ Mauvaise réponse
+
+</div>
+
+<div class="explication">
+
+Bonne réponse :
+${q.reponses[q.bonne]}
+
+<br><br>
+
+${q.explication}
+
+</div>
+`;
+
+}
+
+});
+
+let appreciation = "";
+
+if(score === quizData.length){
+
+appreciation =
+"⭐⭐⭐⭐⭐ Maîtrise parfaite";
+
+}
+else if(score >= 4){
+
+appreciation =
+"⭐⭐⭐⭐ Très bonne compréhension";
+
+}
+else if(score >= 3){
+
+appreciation =
+"⭐⭐⭐ Bases acquises";
+
+}
+else if(score >= 2){
+
+appreciation =
+"⭐⭐ À renforcer";
+
+}
+else{
+
+appreciation =
+"⭐ Révision nécessaire";
+
+}
+
+document.getElementById(
+"resultat"
+).style.display="block";
+
+document.getElementById(
+"resultat"
+).innerHTML =
+
+`
+<h2>
+
+Résultat
+
+</h2>
+
+<p>
+
+Score :
+<strong>
+
+${score}/${quizData.length}
+
+</strong>
+
+</p>
+
+<p>
+
+${appreciation}
+
+</p>
+`;
+
+window.scrollTo(
+0,
+document.body.scrollHeight
+);
+
+}
+
+</script>
+
+</body>
+
+</html>

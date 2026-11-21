@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>TarotQuizz</title>
+
+<style>
+
+body{
+    font-family: Arial, sans-serif;
+    background:#f5f5f5;
+    margin:0;
+    padding:20px;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+    background:white;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 0 10px rgba(0,0,0,0.15);
+}
+
+h1{
+    text-align:center;
+    color:#2c3e50;
+}
+
+.question{
+    margin-bottom:30px;
+    padding-bottom:20px;
+    border-bottom:1px solid #ddd;
+}
+
+.question h3{
+    color:#34495e;
+}
+
+button{
+    background:#2c3e50;
+    color:white;
+    border:none;
+    padding:15px 25px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:18px;
+}
+
+button:hover{
+    background:#1a252f;
+}
+
+#resultat{
+    display:none;
+    margin-top:30px;
+    padding:20px;
+    background:#ecf9f0;
+    border:1px solid #28a745;
+    border-radius:10px;
+}
+
+.bonne{
+    color:green;
+    margin-top:10px;
+}
+
+.mauvaise{
+    color:red;
+    margin-top:10px;
+}
+
+.explication{
+    margin-top:5px;
+    font-style:italic;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1 id="titreQuiz"></h1>
+
+<p>
+
+Nom :
+
+<input type="text"
+id="nom"
+placeholder="Votre prénom">
+
+</p>
+
+<form id="quizContainer"></form>
+
+<button onclick="corrigerQuiz()">
+
+Valider le quiz
+
+</button>
+
+<div id="resultat"></div>
+
+</div>
+
+<script>
+
+/************************************************
+MODIFIER UNIQUEMENT CI-DESSOUS
+************************************************/
+
+const quizTitre =
+"Quiz : La Roue de Fortune";
+
+const quizData = [
+
+{
+question :
+"Quelle est la mission principale de la Roue de Fortune ?",
+
+reponses : [
+"Conserver ce qui a été construit",
+"Remettre le mouvement en marche et saisir une nouvelle opportunité",
+"Prendre le pouvoir sur les autres",
+"Trouver la vérité cachée"
+],
+
+bonne : 1,
+
+explication :
+"La Roue de Fortune annonce un changement de cycle. Une nouvelle possibilité apparaît, mais il faut l'accompagner par l'action."
+},
+
+{
+question :
+"Parmi ces propositions, laquelle correspond le mieux à l'énergie lumière de la Roue de Fortune ?",
+
+reponses : [
+"Adaptation, mouvement, opportunité",
+"Contrôle, stabilité, rigidité",
+"Solitude, retrait, contemplation",
+"Secret, intuition, silence"
+],
+
+bonne : 0,
+
+explication :
+"La Roue de Fortune représente la capacité à s'adapter aux changements et à saisir les occasions qui se présentent."
+},
+
+{
+question :
+"Dans un tirage, la Roue de Fortune apparaît en position CONTRE. Quelle interprétation est la plus cohérente ?",
+
+reponses : [
+"Le consultant refuse un changement nécessaire ou reste bloqué dans un cycle",
+"Le consultant manque d'imagination",
+"Le consultant est trop prudent",
+"Le consultant doit absolument changer de travail"
+],
+
+bonne : 0,
+
+explication :
+"La Roue en ombre indique souvent qu'une personne s'accroche à une situation alors que la vie tente de la remettre en mouvement."
+},
+
+{
+question :
+"Quelle est l'erreur fréquente de la Roue de Fortune ?",
+
+reponses : [
+"Confondre changement et progrès",
+"Confondre intuition et émotion",
+"Confondre réflexion et sagesse",
+"Confondre force et autorité"
+],
+
+bonne : 0,
+
+explication :
+"Tout mouvement n'est pas forcément une avancée. Encore faut-il tourner la roue dans la bonne direction."
+},
+
+{
+question :
+"Laquelle de ces phrases résume le mieux la Roue de Fortune lumineuse ?",
+
+reponses : [
+"Je saisis la chance qui se présente",
+"J'attends que les choses arrivent toutes seules",
+"Je contrôle tout",
+"Je reste fidèle à mes habitudes"
+],
+
+bonne : 0,
+
+explication :
+"La Roue offre une opportunité, mais elle n'agit jamais à la place de la personne."
+},
+
+{
+question :
+"Complète la progression initiatique : Ermite : Je cherche – Roue de Fortune : ?",
+
+reponses : [
+"Je maîtrise",
+"J'évolue",
+"Je transforme",
+"Je ressens"
+],
+
+bonne : 1,
+
+explication :
+"Dans ton parcours initiatique, la Roue de Fortune correspond à la mission : J'évolue."
+},
+
+{
+question :
+"Quelle relation particulière existe entre le Bateleur et la Roue de Fortune ?",
+
+reponses : [
+"Le Bateleur débute sans expérience ; la Roue permet de recommencer avec de l'expérience",
+"Les deux cartes sont opposées",
+"La Roue représente la fin du Bateleur",
+"Il n'existe aucun lien symbolique entre elles"
+],
+
+bonne : 0,
+
+explication :
+"Le Bateleur est le débutant du premier cycle. La Roue de Fortune est un nouveau début, mais enrichi par les expériences du premier parcours."
+},
+
+{
+question :
+"Quelle différence fondamentale existe entre la Roue de Fortune et l'Arcane Sans Nom ?",
+
+reponses : [
+"La Roue accompagne le changement ; l'Arcane Sans Nom provoque le changement",
+"La Roue détruit ; l'Arcane Sans Nom construit",
+"La Roue ralentit ; l'Arcane Sans Nom accélère",
+"Ces deux cartes décrivent exactement la même chose"
+],
+
+bonne : 0,
+
+explication :
+"La Roue tourne la manivelle du changement. L'Arcane Sans Nom prend la faucille et coupe ce qui doit disparaître."
+},
+
+{
+question :
+"Après avoir perdu des points à cause d'excès de vitesse, un conducteur suit un stage de récupération. Il accepte de redevenir élève, récupère ses points et retrouve la possibilité de conduire. Pourquoi cette situation illustre-t-elle la Roue de Fortune ?",
+
+reponses : [
+"La vie efface ses erreurs sans qu'il ait d'effort à fournir",
+"Une nouvelle opportunité apparaît, mais il doit agir pour la saisir et repartir autrement",
+"Le conducteur est puni une seconde fois",
+"La vie lui garantit désormais qu'il ne fera plus d'erreur"
+],
+
+bonne : 1,
+
+explication :
+"La Roue de Fortune agit comme une roue de secours. Une nouvelle chance apparaît, mais il faut décider d'entrer dans le mouvement. Le conducteur redevient temporairement débutant afin d'utiliser autrement ce qu'il a appris."
+}
+
+];
+
+/************************************************
+NE RIEN MODIFIER EN DESSOUS
+************************************************/
+
+document.getElementById("titreQuiz").innerText =
+quizTitre;
+
+const container =
+document.getElementById("quizContainer");
+
+quizData.forEach((q, index)=>{
+
+let html =
+`
+<div class="question">
+
+<h3>
+
+Question ${index+1}
+
+</h3>
+
+<p>${q.question}</p>
+`;
+
+q.reponses.forEach((r, i)=>{
+
+html +=
+`
+<label>
+
+<input
+type="radio"
+name="q${index}"
+value="${i}">
+
+${r}
+
+</label>
+
+<br>
+
+`;
+
+});
+
+html +=
+`
+<div id="feedback${index}"></div>
+
+</div>
+`;
+
+container.innerHTML += html;
+
+});
+
+function corrigerQuiz(){
+
+let score = 0;
+
+quizData.forEach((q,index)=>{
+
+let reponse =
+document.querySelector(
+'input[name="q'+index+'"]:checked'
+);
+
+let feedback =
+document.getElementById(
+"feedback"+index
+);
+
+if(
+reponse &&
+parseInt(reponse.value)
+=== q.bonne
+){
+
+score++;
+
+feedback.innerHTML =
+`
+<div class="bonne">
+
+✅ Bonne réponse
+
+</div>
+
+<div class="explication">
+
+${q.explication}
+
+</div>
+`;
+
+}
+else{
+
+feedback.innerHTML =
+`
+<div class="mauvaise">
+
+❌ Mauvaise réponse
+
+</div>
+
+<div class="explication">
+
+Bonne réponse :
+${q.reponses[q.bonne]}
+
+<br><br>
+
+${q.explication}
+
+</div>
+`;
+
+}
+
+});
+
+let appreciation = "";
+
+if(score === quizData.length){
+
+appreciation =
+"⭐⭐⭐⭐⭐ Maîtrise parfaite";
+
+}
+else if(score >= 4){
+
+appreciation =
+"⭐⭐⭐⭐ Très bonne compréhension";
+
+}
+else if(score >= 3){
+
+appreciation =
+"⭐⭐⭐ Bases acquises";
+
+}
+else if(score >= 2){
+
+appreciation =
+"⭐⭐ À renforcer";
+
+}
+else{
+
+appreciation =
+"⭐ Révision nécessaire";
+
+}
+
+document.getElementById(
+"resultat"
+).style.display="block";
+
+document.getElementById(
+"resultat"
+).innerHTML =
+
+`
+<h2>
+
+Résultat
+
+</h2>
+
+<p>
+
+Score :
+<strong>
+
+${score}/${quizData.length}
+
+</strong>
+
+</p>
+
+<p>
+
+${appreciation}
+
+</p>
+`;
+
+window.scrollTo(
+0,
+document.body.scrollHeight
+);
+
+}
+
+</script>
+
+</body>
+
+</html>

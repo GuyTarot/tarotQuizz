@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>TarotQuizz</title>
+
+<style>
+
+body{
+    font-family: Arial, sans-serif;
+    background:#f5f5f5;
+    margin:0;
+    padding:20px;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+    background:white;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 0 10px rgba(0,0,0,0.15);
+}
+
+h1{
+    text-align:center;
+    color:#2c3e50;
+}
+
+.question{
+    margin-bottom:30px;
+    padding-bottom:20px;
+    border-bottom:1px solid #ddd;
+}
+
+.question h3{
+    color:#34495e;
+}
+
+button{
+    background:#2c3e50;
+    color:white;
+    border:none;
+    padding:15px 25px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:18px;
+}
+
+button:hover{
+    background:#1a252f;
+}
+
+#resultat{
+    display:none;
+    margin-top:30px;
+    padding:20px;
+    background:#ecf9f0;
+    border:1px solid #28a745;
+    border-radius:10px;
+}
+
+.bonne{
+    color:green;
+    margin-top:10px;
+}
+
+.mauvaise{
+    color:red;
+    margin-top:10px;
+}
+
+.explication{
+    margin-top:5px;
+    font-style:italic;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1 id="titreQuiz"></h1>
+
+<p>
+
+Nom :
+
+<input type="text"
+id="nom"
+placeholder="Votre prénom">
+
+</p>
+
+<form id="quizContainer"></form>
+
+<button onclick="corrigerQuiz()">
+
+Valider le quiz
+
+</button>
+
+<div id="resultat"></div>
+
+</div>
+
+<script>
+
+/************************************************
+MODIFIER UNIQUEMENT CI-DESSOUS
+************************************************/
+
+const quizTitre =
+"Quiz : L'Empereur";
+
+const quizData = [
+
+{
+question :
+"Quelle est la mission principale de l'Empereur ?",
+
+reponses : [
+"Comprendre avant d'agir",
+"Construire une structure solide et durable",
+"Explorer son monde intérieur",
+"Se laisser porter par la vie"
+],
+
+bonne : 1,
+
+explication :
+"L'Empereur est l'arcane de la construction. Il organise, structure et donne des fondations durables à ce qui a été conçu auparavant."
+},
+
+{
+question :
+"Parmi ces propositions, laquelle correspond le mieux à l'énergie lumière de l'Empereur ?",
+
+reponses : [
+"Stabilité, organisation, responsabilité",
+"Intuition, mystère, patience",
+"Rêve, imagination, sensibilité",
+"Changement, imprévu, hasard"
+],
+
+bonne : 0,
+
+explication :
+"L'Empereur construit, stabilise et assume ses responsabilités. Il transforme un projet en réalité concrète."
+},
+
+{
+question :
+"Dans un tirage, l'Empereur apparaît en position CONTRE. Quelle interprétation est la plus cohérente ?",
+
+reponses : [
+"Le consultant réfléchit trop avant d'agir",
+"Le consultant risque de manquer de créativité",
+"Le consultant cherche peut-être à tout contrôler ou refuse de s'adapter",
+"Le consultant a besoin de davantage d'émotions"
+],
+
+bonne : 2,
+
+explication :
+"L'ombre de l'Empereur est la rigidité. Il peut vouloir contrôler excessivement les situations et les personnes."
+},
+
+{
+question :
+"Quelle est l'erreur fréquente de l'Empereur ?",
+
+reponses : [
+"Confondre intuition et imagination",
+"Confondre autorité et pouvoir",
+"Confondre amour et dépendance",
+"Confondre patience et lenteur"
+],
+
+bonne : 1,
+
+explication :
+"L'Empereur lumineux exerce une autorité juste. Son ombre consiste à vouloir dominer ou imposer sa volonté."
+},
+
+{
+question :
+"Laquelle de ces phrases résume le mieux l'Empereur lumineux ?",
+
+reponses : [
+"Je ressens profondément",
+"Je cherche ma vérité",
+"Je bâtis pour durer",
+"Je me laisse guider par le hasard"
+],
+
+bonne : 2,
+
+explication :
+"L'Empereur construit sur le long terme. Il cherche la stabilité et la pérennité."
+},
+
+{
+question :
+"Complète la progression initiatique : Impératrice : J'exprime – Empereur : ?",
+
+reponses : [
+"Je construis",
+"Je transmets",
+"Je maîtrise",
+"Je choisis"
+],
+
+bonne : 0,
+
+explication :
+"Dans ton cycle initiatique, l'Empereur correspond à la mission : Je construis."
+},
+
+{
+question :
+"Un consultant possède un projet solide mais n'a encore mis en place ni organisation, ni plan d'action. L'Empereur apparaît en conseil. Que suggère-t-il ?",
+
+reponses : [
+"Attendre davantage",
+"Chercher encore de nouvelles idées",
+"Structurer le projet et poser des bases solides",
+"Changer complètement d'objectif"
+],
+
+bonne : 2,
+
+explication :
+"L'Empereur demande de transformer les idées en réalisations concrètes grâce à l'organisation et à la méthode."
+}
+
+];
+
+/************************************************
+NE RIEN MODIFIER EN DESSOUS
+************************************************/
+
+document.getElementById("titreQuiz").innerText =
+quizTitre;
+
+const container =
+document.getElementById("quizContainer");
+
+quizData.forEach((q, index)=>{
+
+let html =
+`
+<div class="question">
+
+<h3>
+
+Question ${index+1}
+
+</h3>
+
+<p>${q.question}</p>
+`;
+
+q.reponses.forEach((r, i)=>{
+
+html +=
+`
+<label>
+
+<input
+type="radio"
+name="q${index}"
+value="${i}">
+
+${r}
+
+</label>
+
+<br>
+
+`;
+
+});
+
+html +=
+`
+<div id="feedback${index}"></div>
+
+</div>
+`;
+
+container.innerHTML += html;
+
+});
+
+function corrigerQuiz(){
+
+let score = 0;
+
+quizData.forEach((q,index)=>{
+
+let reponse =
+document.querySelector(
+'input[name="q'+index+'"]:checked'
+);
+
+let feedback =
+document.getElementById(
+"feedback"+index
+);
+
+if(
+reponse &&
+parseInt(reponse.value)
+=== q.bonne
+){
+
+score++;
+
+feedback.innerHTML =
+`
+<div class="bonne">
+
+✅ Bonne réponse
+
+</div>
+
+<div class="explication">
+
+${q.explication}
+
+</div>
+`;
+
+}
+else{
+
+feedback.innerHTML =
+`
+<div class="mauvaise">
+
+❌ Mauvaise réponse
+
+</div>
+
+<div class="explication">
+
+Bonne réponse :
+${q.reponses[q.bonne]}
+
+<br><br>
+
+${q.explication}
+
+</div>
+`;
+
+}
+
+});
+
+let appreciation = "";
+
+if(score === quizData.length){
+
+appreciation =
+"⭐⭐⭐⭐⭐ Maîtrise parfaite";
+
+}
+else if(score >= 4){
+
+appreciation =
+"⭐⭐⭐⭐ Très bonne compréhension";
+
+}
+else if(score >= 3){
+
+appreciation =
+"⭐⭐⭐ Bases acquises";
+
+}
+else if(score >= 2){
+
+appreciation =
+"⭐⭐ À renforcer";
+
+}
+else{
+
+appreciation =
+"⭐ Révision nécessaire";
+
+}
+
+document.getElementById(
+"resultat"
+).style.display="block";
+
+document.getElementById(
+"resultat"
+).innerHTML =
+
+`
+<h2>
+
+Résultat
+
+</h2>
+
+<p>
+
+Score :
+<strong>
+
+${score}/${quizData.length}
+
+</strong>
+
+</p>
+
+<p>
+
+${appreciation}
+
+</p>
+`;
+
+window.scrollTo(
+0,
+document.body.scrollHeight
+);
+
+}
+
+</script>
+
+</body>
+
+</html>
